@@ -655,7 +655,8 @@
 
     <footer>
       <div>
-        See on väike sõprade sisene ARC Raiders blueprintide nimekiri – kõik sama lehe külastajad näevad ja muudavad sama listi. Eraldi sisselogimist ei ole, seega jaga linki pigem oma kambas.
+        See on väike sõprade sisene ARC Raiders blueprintide nimekiri – kõik sama lehe külastajad näevad ja muudavad sama listi. Eraldi sisselogimist ei ole, seega jaga linki pigem oma kambas. <br /><br />
+        Vahetamine käib lihtsalt: vaata nimekirjast kasutajanime, otsi sama nick Discordi kanalis ja leppige seal aeg ning server/koht mängus kokku.
       </div>
     </footer>
   </div>
@@ -665,61 +666,119 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
 
   <script>
-    // 1) FIREBASE KONFIG
-const firebaseConfig = {
-  apiKey: "AIzaSyDoL5uZAHhIwEu6bzBILKs8Ld3UPTa1usg",
-  authDomain: "nainnainnain-bp.firebaseapp.com",
-  projectId: "nainnainnain-bp",
-  storageBucket: "nainnainnain-bp.firebasestorage.app",
-  messagingSenderId: "381453763834",
-  appId: "1:381453763834:web:7e9d33d0db582075767543",
-  measurementId: "G-79CDFFX8YW"
-};
+    // 1) LISA SIIA OMA FIREBASE KONFIG (jäta ülejäänu alles)
+    const firebaseConfig = {
+      apiKey: "SINU_API_KEY",
+      authDomain: "SINU_PROJECT_ID.firebaseapp.com",
+      projectId: "SINU_PROJECT_ID",
+      storageBucket: "SINU_PROJECT_ID.appspot.com",
+      messagingSenderId: "SINU_SENDER_ID",
+      appId: "SINU_APP_ID"
+    };
 
-    // Firebase init ja Firestore
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     const colRef = db.collection("arc_raiders_blueprints_shared");
 
-    // 2) AUTOCOMPLETE: blueprintide nimed 
-    const KNOWN_BLUEPRINTS = [
-      "Anvil Blueprint",
-      "Anvil Splitter Blueprint",
-      "Aphelion Rifle Blueprint",
-      "Bettina Blueprint",
-      "Bobcat Blueprint",
-      "Equalizer Blueprint",
-      "Ferro Blueprint",
-      "Kettle Blueprint",
-      "Stitcher Blueprint",
-      "Jupiter Blueprint",
-      "Light Gun Parts Blueprint",
-      "Medium Gun Parts Blueprint",
-      "Heavy Gun Parts Blueprint",
-      "Battery Blueprint",
-      "Fireball Burner Blueprint",
-      "Showstopper Blueprint",
-      "Silencer I Blueprint",
-      "Silencer II Blueprint",
-      "Smoke Grenade Blueprint",
-      "Stable Stock II Blueprint",
-      "Stable Stock III Blueprint",
-      "Tactical Mk. 3 Blueprint",
-      "Tagging Grenade Blueprint",
-      "Torrente Blueprint",
-      "Trigger ‘Nade Blueprint",
-      "Wolfpack Blueprint",
-      "Heavy Fuze Grenade Blueprint",
-      "Venator Blueprint",
-      "Processor Blueprint",
-      "Advanced ARC Powercell Blueprint"
+    // Täielik blueprintide nimekiri wiki "Blueprint Table" järgi.
+    // Rarity:
+    //  - relvadel päris ARC Raidersi rarity (Fandom Weapons tabeli järgi)
+    //  - ülejäänutel praegu 'common' (võid hiljem soovi järgi muuta)
+    const BLUEPRINT_DATA = [
+      { name: "Anvil Blueprint", rarity: "uncommon" },
+      { name: "Angled Grip II Blueprint", rarity: "common" },
+      { name: "Angled Grip III Blueprint", rarity: "common" },
+      { name: "Aphelion Blueprint", rarity: "legendary" },
+      { name: "Barricade Kit Blueprint", rarity: "common" },
+      { name: "Bettina Blueprint", rarity: "epic" },
+      { name: "Blaze Grenade Blueprint", rarity: "common" },
+      { name: "Bobcat Blueprint", rarity: "epic" },
+      { name: "Burletta Blueprint", rarity: "uncommon" },
+      { name: "Combat Mk. 3 (Aggressive) Blueprint", rarity: "common" },
+      { name: "Combat Mk. 3 (Flanking) Blueprint", rarity: "common" },
+      { name: "Compensator II Blueprint", rarity: "common" },
+      { name: "Compensator III Blueprint", rarity: "common" },
+      { name: "Complex Gun Parts Blueprint", rarity: "common" },
+      { name: "Defibrillator Blueprint", rarity: "common" },
+      { name: "Explosive Mine Blueprint", rarity: "common" },
+      { name: "Extended Barrel Blueprint", rarity: "common" },
+      { name: "Extended Light Magazine II Blueprint", rarity: "common" },
+      { name: "Extended Light Magazine III Blueprint", rarity: "common" },
+      { name: "Extended Medium Magazine II Blueprint", rarity: "common" },
+      { name: "Extended Medium Magazine III Blueprint", rarity: "common" },
+      { name: "Extended Shotgun Magazine II Blueprint", rarity: "common" },
+      { name: "Extended Shotgun Magazine III Blueprint", rarity: "common" },
+      { name: "Equalizer Blueprint", rarity: "legendary" },
+      { name: "Heavy Gun Parts Blueprint", rarity: "common" },
+      { name: "Horizontal Grip Blueprint", rarity: "common" },
+      { name: "Hullcracker Blueprint", rarity: "epic" },
+      { name: "Il Toro Blueprint", rarity: "uncommon" },
+      { name: "Jolt Mine Blueprint", rarity: "common" },
+      { name: "Jupiter Blueprint", rarity: "legendary" },
+      { name: "Light Gun Parts Blueprint", rarity: "common" },
+      { name: "Light Stick Blueprint", rarity: "common" },
+      { name: "Lightweight Stock Blueprint", rarity: "common" },
+      { name: "Looting Mk. 3 (Survivor) Blueprint", rarity: "common" },
+      { name: "Lure Grenade Blueprint", rarity: "common" },
+      { name: "Medium Gun Parts Blueprint", rarity: "common" },
+      { name: "Muzzle Brake II Blueprint", rarity: "common" },
+      { name: "Muzzle Brake III Blueprint", rarity: "common" },
+      { name: "Osprey Blueprint", rarity: "rare" },
+      { name: "Padded Stock Blueprint", rarity: "common" },
+      { name: "Remote Raider Flare Blueprint", rarity: "common" },
+      { name: "Shotgun Choke II Blueprint", rarity: "common" },
+      { name: "Shotgun Choke III Blueprint", rarity: "common" },
+      { name: "Shotgun Silencer Blueprint", rarity: "common" },
+      { name: "Showstopper Blueprint", rarity: "common" },
+      { name: "Silencer I Blueprint", rarity: "common" },
+      { name: "Silencer II Blueprint", rarity: "common" },
+      { name: "Smoke Grenade Blueprint", rarity: "common" },
+      { name: "Snap Hook Blueprint", rarity: "common" },
+      { name: "Stable Stock II Blueprint", rarity: "common" },
+      { name: "Stable Stock III Blueprint", rarity: "common" },
+      { name: "Tactical Mk. 3 (Defensive) Blueprint", rarity: "common" },
+      { name: "Tactical Mk. 3 (Healing) Blueprint", rarity: "common" },
+      { name: "Tagging Grenade Blueprint", rarity: "common" },
+      { name: "Tempest Blueprint", rarity: "epic" },
+      { name: "Torrente Blueprint", rarity: "rare" },
+      { name: "Trigger 'Nade Blueprint", rarity: "common" },
+      { name: "Venator Blueprint", rarity: "rare" },
+      { name: "Vertical Grip II Blueprint", rarity: "common" },
+      { name: "Vertical Grip III Blueprint", rarity: "common" },
+      { name: "Vita Shot Blueprint", rarity: "common" },
+      { name: "Vita Spray Blueprint", rarity: "common" },
+      { name: "Vulcano Blueprint", rarity: "epic" },
+      { name: "Wolfpack Blueprint", rarity: "common" }
     ];
 
+    // Datalist ja rarity lookup
     const datalistEl = document.getElementById("blueprintNames");
-    KNOWN_BLUEPRINTS.forEach((name) => {
+    const nameInput = document.getElementById("name");
+    const raritySelect = document.getElementById("rarity");
+
+    const rarityLookup = {};
+    BLUEPRINT_DATA.forEach((bp) => {
       const opt = document.createElement("option");
-      opt.value = name;
+      opt.value = bp.name;
       datalistEl.appendChild(opt);
+      rarityLookup[bp.name.toLowerCase()] = bp.rarity;
+    });
+
+    function autoFillRarity() {
+      const key = nameInput.value.trim().toLowerCase();
+      if (key && rarityLookup[key]) {
+        raritySelect.value = rarityLookup[key];
+      } else {
+        // kui ei leitud – vaikimisi common
+        raritySelect.value = "common";
+      }
+    }
+
+    nameInput.addEventListener("change", autoFillRarity);
+    nameInput.addEventListener("blur", autoFillRarity);
+    nameInput.addEventListener("input", () => {
+      // kui kasutaja valib täpse nime, uuendame kohe
+      autoFillRarity();
     });
 
     /** Kohalik vahemälu UI jaoks (andmed tulevad Firestore'ist) */
@@ -887,7 +946,7 @@ const firebaseConfig = {
       updateStats();
     }
 
-    //  kuulaja – kui keegi midagi lisab/muudab/kustutab
+    // Reaalajas kuulaja – kui keegi midagi lisab/muudab/kustutab, uuendame listi
     colRef.orderBy("created", "desc").onSnapshot((snapshot) => {
       const arr = [];
       snapshot.forEach((doc) => {
@@ -910,8 +969,8 @@ const firebaseConfig = {
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const name = document.getElementById("name").value.trim();
-      const rarity = document.getElementById("rarity").value || "common";
+      const name = nameInput.value.trim();
+      const rarity = raritySelect.value || "common";
       const status = document.getElementById("status").value || "have";
       const owner = document.getElementById("owner").value.trim();
       const notes = document.getElementById("notes").value.trim();
@@ -931,6 +990,7 @@ const firebaseConfig = {
           created: firebase.firestore.FieldValue.serverTimestamp(),
         });
         form.reset();
+        raritySelect.value = "common";
       } catch (err) {
         console.error("Lisamine ebaõnnestus:", err);
         alert("Midagi läks valesti blueprinti salvestamisel.");
