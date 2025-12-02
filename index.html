@@ -89,12 +89,6 @@
       background: rgba(15, 23, 42, 0.7);
     }
 
-    .subtitle {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
     .pill-stats {
       display: flex;
       gap: 8px;
@@ -151,12 +145,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-    }
-
-    .panel h2 span {
-      font-size: 0.75rem;
-      color: var(--muted);
-      font-weight: 400;
     }
 
     form {
@@ -233,16 +221,11 @@
 
     .actions {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items: center;
       gap: 8px;
       margin-top: 2px;
       flex-wrap: wrap;
-    }
-
-    .actions-left {
-      font-size: 0.7rem;
-      color: var(--muted);
     }
 
     button {
@@ -374,39 +357,50 @@
       gap: 6px;
     }
 
-    .card-main {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-    }
-
-    .bp-thumb {
-      flex: 0 0 48px;
-      height: 48px;
-      border-radius: 10px;
-      overflow: hidden;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      background: #020617;
-    }
-
-    .bp-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .bp-text {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
     .bp-name {
       font-size: 0.92rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.12em;
+    }
+
+    .bp-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 2px;
+    }
+
+    .bp-chip {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 3px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      color: var(--muted);
+      background: rgba(15, 23, 42, 0.7);
+    }
+
+    .bp-chip.rarity-common {
+      border-color: #6b7280;
+      color: #d1d5db;
+    }
+    .bp-chip.rarity-uncommon {
+      border-color: #22c55e;
+      color: #bbf7d0;
+    }
+    .bp-chip.rarity-rare {
+      border-color: #3b82f6;
+      color: #bfdbfe;
+    }
+    .bp-chip.rarity-epic {
+      border-color: #a855f7;
+      color: #e9d5ff;
+    }
+    .bp-chip.rarity-legendary {
+      border-color: #f59e0b;
+      color: #fed7aa;
     }
 
     .status-pill {
@@ -433,12 +427,6 @@
       color: #e0f2fe;
       border-color: #38bdf8;
       box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.2);
-    }
-
-    .status-trade {
-      color: #fee2e2;
-      border-color: #fb7185;
-      box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.25);
     }
 
     .status-dot {
@@ -534,22 +522,12 @@
     }
 
     footer {
-      margin-top: 10px;
-      font-size: 0.7rem;
+      margin-top: 18px;
+      font-size: 0.8rem;
       color: var(--muted);
       display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    footer a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
+      justify-content: center;
+      text-align: center;
     }
   </style>
 </head>
@@ -561,22 +539,16 @@
           NAINNAINNAIN Kaare Kütid
           <span class="tag">Blueprintide vahetus</span>
         </h1>
-        <p class="subtitle">
-          Ühine ARC Raiders blueprintide nimekiri – mida keegi omab, mida otsib ja mida on valmis vahetama.
-        </p>
       </div>
       <div class="pill-stats">
         <div class="pill">
           KOKKU: <strong id="statTotal">0</strong>
         </div>
         <div class="pill">
-          ON: <strong id="statHave">0</strong>
+          PAKKUMISI: <strong id="statOffer">0</strong>
         </div>
         <div class="pill">
-          OTSIVAD: <strong id="statWant">0</strong>
-        </div>
-        <div class="pill">
-          VAHETUSEKS: <strong id="statTrade">0</strong>
+          OTSINGUID: <strong id="statWant">0</strong>
         </div>
       </div>
     </header>
@@ -586,7 +558,6 @@
       <section class="panel">
         <h2>
           Lisa blueprint
-          <span></span>
         </h2>
         <form id="blueprintForm">
           <div class="field-row">
@@ -605,13 +576,25 @@
 
           <div class="field-row">
             <div class="field">
-              <label for="status">Olek</label>
-              <select id="status">
-                <option value="have">Mul olemas (võin vahetada)</option>
-                <option value="want">Otsin</option>
-                <option value="trade">Ülejääk / ainult vahetus</option>
+              <label for="rarity">Rarity</label>
+              <select id="rarity">
+                <option value="common">Common</option>
+                <option value="uncommon">Uncommon</option>
+                <option value="rare">Rare</option>
+                <option value="epic">Epic</option>
+                <option value="legendary">Legendary</option>
               </select>
             </div>
+            <div class="field">
+              <label for="status">Olek</label>
+              <select id="status">
+                <option value="have">Pakun</option>
+                <option value="want">Otsin</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field-row">
             <div class="field">
               <label for="owner">Kasutaja</label>
               <input
@@ -622,29 +605,15 @@
             </div>
           </div>
 
-          <div class="field-row">
-            <div class="field">
-              <label for="imageUrl">Pildi URL (valikuline)</label>
-              <input
-                id="imageUrl"
-                type="text"
-                placeholder="https://… (Discord/Imgur/Steam pilt)"
-              />
-            </div>
-          </div>
-
           <div class="field">
-            <label for="notes">Märkmed</label>
+            <label for="notes">Märkused</label>
             <textarea
               id="notes"
-              placeholder="Kust leidsid, millega kaupled, rollid jne."
+              placeholder="Kust leidsid, mida vastu tahad jne."
             ></textarea>
           </div>
 
           <div class="actions">
-            <div class="actions-left">
-              Kõik sama lehe kasutajad näevad seda ühist listi.
-            </div>
             <button type="submit" class="btn-primary">
               <span>＋</span> LISA BLUEPRINT
             </button>
@@ -656,7 +625,6 @@
       <section class="panel list-panel">
         <h2>
           Ühine nimekiri
-          <span>Filtreeri ja otsi vahetuste jaoks</span>
         </h2>
 
         <div class="filters">
@@ -664,16 +632,15 @@
             <input
               id="filterSearch"
               type="text"
-              placeholder="Otsi nime, märkmete või kasutaja järgi…"
+              placeholder="Otsi nime, märkuste või kasutaja järgi…"
             />
           </div>
           <div class="filters-group">
             <label for="filterStatus">Olek</label>
             <select id="filterStatus" class="select-small">
               <option value="all">Kõik</option>
-              <option value="have">On</option>
+              <option value="have">Pakuvad</option>
               <option value="want">Otsivad</option>
-              <option value="trade">Vahetuseks</option>
             </select>
           </div>
         </div>
@@ -688,8 +655,7 @@
 
     <footer>
       <div>
-        Andmed hoitakse ühes Firestore andmebaasis – kõik sama lehe külastajad
-        (teie sõprade ringis) näevad sama nimekirja. Eraldi sisselogimist ei ole.
+        See on väike sõprade sisene ARC Raiders blueprintide nimekiri – kõik sama lehe külastajad näevad ja muudavad sama listi. Eraldi sisselogimist ei ole, seega jaga linki pigem oma kambas.
       </div>
     </footer>
   </div>
@@ -700,7 +666,7 @@
 
   <script>
     // 1) FIREBASE KONFIG
- const firebaseConfig = {
+const firebaseConfig = {
   apiKey: "AIzaSyDoL5uZAHhIwEu6bzBILKs8Ld3UPTa1usg",
   authDomain: "nainnainnain-bp.firebaseapp.com",
   projectId: "nainnainnain-bp",
@@ -715,7 +681,7 @@
     const db = firebase.firestore();
     const colRef = db.collection("arc_raiders_blueprints_shared");
 
-    // 2) AUTOCOMPLETE: blueprintide nimed – siit saad nimekirja muuta
+    // 2) AUTOCOMPLETE: blueprintide nimed 
     const KNOWN_BLUEPRINTS = [
       "Anvil Blueprint",
       "Anvil Splitter Blueprint",
@@ -723,6 +689,9 @@
       "Bettina Blueprint",
       "Bobcat Blueprint",
       "Equalizer Blueprint",
+      "Ferro Blueprint",
+      "Kettle Blueprint",
+      "Stitcher Blueprint",
       "Jupiter Blueprint",
       "Light Gun Parts Blueprint",
       "Medium Gun Parts Blueprint",
@@ -761,26 +730,50 @@
     const emptyStateEl = document.getElementById("emptyState");
 
     const statTotalEl = document.getElementById("statTotal");
-    const statHaveEl = document.getElementById("statHave");
+    const statOfferEl = document.getElementById("statOffer");
     const statWantEl = document.getElementById("statWant");
-    const statTradeEl = document.getElementById("statTrade");
 
     const filterSearchEl = document.getElementById("filterSearch");
     const filterStatusEl = document.getElementById("filterStatus");
 
     function statusLabel(s) {
-      if (s === "have") return "on";
-      if (s === "want") return "otsivad";
-      if (s === "trade") return "vahetuseks";
+      if (s === "have") return "pakub";
+      if (s === "want") return "otsib";
       return s;
     }
 
     function statusClass(s) {
-      return s === "want"
-        ? "status-want"
-        : s === "trade"
-        ? "status-trade"
-        : "status-have";
+      return s === "want" ? "status-want" : "status-have";
+    }
+
+    function rarityClass(r) {
+      switch (r) {
+        case "uncommon":
+          return "rarity-uncommon";
+        case "rare":
+          return "rarity-rare";
+        case "epic":
+          return "rarity-epic";
+        case "legendary":
+          return "rarity-legendary";
+        default:
+          return "rarity-common";
+      }
+    }
+
+    function rarityLabel(r) {
+      switch (r) {
+        case "uncommon":
+          return "Uncommon";
+        case "rare":
+          return "Rare";
+        case "epic":
+          return "Epic";
+        case "legendary":
+          return "Legendary";
+        default:
+          return "Common";
+      }
     }
 
     function escapeHtml(str) {
@@ -798,18 +791,15 @@
       card.dataset.id = bp.id;
 
       const notes = bp.notes && bp.notes.trim().length > 0 ? bp.notes.trim() : "";
-      const image = bp.imageUrl && bp.imageUrl.trim() ? bp.imageUrl.trim() : "";
+      const rarClass = rarityClass(bp.rarity);
+      const rarLabel = rarityLabel(bp.rarity);
 
       card.innerHTML = `
         <div class="card-header">
-          <div class="card-main">
-            ${
-              image
-                ? `<div class="bp-thumb"><img src="${escapeHtml(image)}" alt="Blueprint image"></div>`
-                : ""
-            }
-            <div class="bp-text">
-              <div class="bp-name">${escapeHtml(bp.name)}</div>
+          <div>
+            <div class="bp-name">${escapeHtml(bp.name)}</div>
+            <div class="bp-meta">
+              <span class="bp-chip ${rarClass}">${escapeHtml(rarLabel)}</span>
             </div>
           </div>
           <div class="status-pill ${statusClass(bp.status)}">
@@ -821,7 +811,7 @@
           ${
             notes
               ? escapeHtml(notes)
-              : "Märkmeid pole. Vajuta MUUDA, et lisada lisainfo või vahetuse tingimused."
+              : "Märkuseid pole. Vajuta MUUDA, et lisada infot või vahetuse tingimusi."
           }
         </div>
         <div class="bp-footer">
@@ -869,14 +859,12 @@
 
     function updateStats() {
       const total = blueprints.length;
-      const have = blueprints.filter((b) => b.status === "have").length;
+      const offer = blueprints.filter((b) => b.status === "have").length;
       const want = blueprints.filter((b) => b.status === "want").length;
-      const trade = blueprints.filter((b) => b.status === "trade").length;
 
       statTotalEl.textContent = total;
-      statHaveEl.textContent = have;
+      statOfferEl.textContent = offer;
       statWantEl.textContent = want;
-      statTradeEl.textContent = trade;
     }
 
     function render() {
@@ -899,7 +887,7 @@
       updateStats();
     }
 
-    // Kuulab
+    //  kuulaja – kui keegi midagi lisab/muudab/kustutab
     colRef.orderBy("created", "desc").onSnapshot((snapshot) => {
       const arr = [];
       snapshot.forEach((doc) => {
@@ -907,10 +895,10 @@
         arr.push({
           id: doc.id,
           name: data.name || "",
+          rarity: data.rarity || "common",
           status: data.status || "have",
           owner: data.owner || "",
           notes: data.notes || "",
-          imageUrl: data.imageUrl || "",
           created: data.created ? data.created.toMillis() : 0,
         });
       });
@@ -923,10 +911,10 @@
       e.preventDefault();
 
       const name = document.getElementById("name").value.trim();
+      const rarity = document.getElementById("rarity").value || "common";
       const status = document.getElementById("status").value || "have";
       const owner = document.getElementById("owner").value.trim();
       const notes = document.getElementById("notes").value.trim();
-      const imageUrl = document.getElementById("imageUrl").value.trim();
 
       if (!name) {
         alert("Palun sisesta blueprinti nimi.");
@@ -936,10 +924,10 @@
       try {
         await colRef.add({
           name,
+          rarity,
           status,
           owner,
           notes,
-          imageUrl,
           created: firebase.firestore.FieldValue.serverTimestamp(),
         });
         form.reset();
@@ -973,33 +961,28 @@
         if (!bp) return;
 
         const newStatusRaw = prompt(
-          "Uus olek (on / otsivad / vahetuseks või have / want / trade):",
+          "Uus olek (pakun / otsin või have / want):",
           statusLabel(bp.status)
         );
         if (!newStatusRaw) return;
 
         const normalized = newStatusRaw.toLowerCase().trim();
         let newStatus;
-        if (normalized === "on") newStatus = "have";
-        else if (normalized === "otsivad") newStatus = "want";
-        else if (normalized === "vahetuseks") newStatus = "trade";
-        else if (["have", "want", "trade"].includes(normalized)) newStatus = normalized;
+        if (normalized === "pakun") newStatus = "have";
+        else if (normalized === "otsin") newStatus = "want";
+        else if (["have", "want"].includes(normalized)) newStatus = normalized;
         else {
-          alert("Vigane olek. Kasuta: on / otsivad / vahetuseks (või have / want / trade).");
+          alert("Vigane olek. Kasuta: pakun / otsin (või have / want).");
           return;
         }
 
         const newNotes = prompt(
-          "Märkmed (jäta tühjaks, et tühjendada):",
+          "Märkused (jäta tühjaks, et tühjendada):",
           bp.notes || ""
         );
         const newOwner = prompt(
           "Kasutaja:",
           bp.owner || ""
-        );
-        const newImageUrl = prompt(
-          "Pildi URL (jäta tühjaks, et eemaldada):",
-          bp.imageUrl || ""
         );
 
         try {
@@ -1007,7 +990,6 @@
             status: newStatus,
             notes: newNotes !== null ? newNotes.trim() : bp.notes,
             owner: newOwner !== null ? newOwner.trim() : bp.owner,
-            imageUrl: newImageUrl !== null ? newImageUrl.trim() : bp.imageUrl,
           });
         } catch (err) {
           console.error("Muutmine ebaõnnestus:", err);
